@@ -1,0 +1,22 @@
+<h3 class="title">Liste de vos personnages actuels</h3>
+<table class="table is-striped is-bordered is-hoverable">
+  <thead>
+    <tr>
+      <th>Pseudo du personnage</th>
+      <th>Serveur</th>
+      <th>Classe</th>
+      <th>Rôle</th>
+      <th>Niveau</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let character of characters">
+      <td>{{character.pseudo}}</td>
+      <td>{{character.server}}</td>
+      <td>{{character.category}}</td>
+      <td>{{character.role}}</td>
+      <td>{{character.level}}</td>
+      <td><i class="fa fa-trash-o has-text-danger" aria-hidden="true"></i></td>
+    </tr>
+  </tbody>
+</table>

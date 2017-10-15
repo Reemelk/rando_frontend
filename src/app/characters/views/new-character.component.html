@@ -1,0 +1,59 @@
+<h3 class="title is-centered">Ajout d'un nouveau personnage</h3>
+<div class="box">
+  <form [formGroup]="newCharacterForm" (ngSubmit)="addNewCharacter()">
+    <div class="columns">
+      <div class="column">
+        <label class="label">Pseudo</label>
+        <p class="control"><input type="text" formControlName="pseudo" class="input"></p>
+      </div>
+      <div class="column">
+        <label class="label">Liste des serveurs</label>
+        <div class="field">
+          <div class="control">
+            <div class="select">
+              <select formControlName="server">
+                <option></option>
+                <hr class="dropdown-divider">
+                <option *ngFor="let server of servers" [value]="server">{{server}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <label class="label">Classe</label>
+        <div class="field">
+          <div class="control">
+            <div class="select">
+              <select formControlName="category">
+                <option></option>
+                <hr class="dropdown-divider">
+                <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <label class="label">Rôle</label>
+        <div class="field">
+          <div class="control">
+            <div class="select">
+              <select [disabled]="true">
+                <option></option>
+                <hr class="dropdown-divider">
+                <option *ngFor=""></option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <label class="label">Niveau</label>
+        <p class="control"><input type="number" formControlName="level" class="input"></p>
+      </div>
+    </div>
+    <button class="button is-medium is-info is-outlined" [disabled]="false">Create</button>
+  </form>
+  <br>
+</div>

@@ -1,0 +1,23 @@
+<div class="container">
+  <button class="button is-primary is-large" (click)="toggleForm()">
+    <span class="icon is-medium"><i class="fa fa-plus"></i></span><span>Nouveau Perso</span>
+  </button>
+  <hr>
+  <div *ngIf="displayNewCharacterForm">
+    <app-new-characters></app-new-characters>
+  </div>
+  <hr>
+  <app-characters-list></app-characters-list>
+</div>
+
+<div class="modal {{levelAlert}}">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="notifications">
+      <div class="notification is-danger">
+        <strong>Veuillez mettre à jour le niveau de chaque personnage avant d'effectuer une recherche ou une création de groupe</strong>
+      </div>
+    </div>
+  </div>
+  <button (click)="closeAlert()" class="modal-close is-large" aria-label="close"></button>
+</div>

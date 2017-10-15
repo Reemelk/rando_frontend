@@ -1,0 +1,26 @@
+<div class="hero-body">
+  <div class="columns is-mobile is-desktop is-centered">
+    <div class="column is-one-third">
+      <h1 class="avatar has-text-centered section">
+        <img src="#" hidden="" style="display: none !important;">
+      </h1>
+      <div class="login-form">
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <p class="control has-icon has-icon-right">
+            <input type="text" formControlName="email" class="input">
+            <span class="icon user"><i class="fa fa-user"></i></span>
+          </p>
+          <p class="control has-icon has-icon-right">
+            <input type="password" formControlName="password" class="input">
+            <span class="icon user"><i class="fa fa-lock"></i></span>
+          </p>
+          <div class="notification is-danger" *ngIf="loginFailed">{{loginFailed}}</div>
+          <p class="control login">
+            <button class="button is-success is-outlined is-large is-fullwidth" [disabled]="!loginForm.valid">Login</button>
+          </p>
+        </form>
+      </div>
+      <div class="section forgot-password"><p class="has-text-centered"><a href="#">Forgot password</a></p></div>
+    </div>
+  </div>
+</div>

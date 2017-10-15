@@ -1,0 +1,50 @@
+<div class="hero-body">
+  <div class="container">
+    <div class="columns is-vcentered">
+      <div class="column is-4 is-offset-4">
+        <h1 class="title">Register an Account</h1>
+        <div class="box">
+          <form [formGroup]="registerForm" (ngSubmit)="register()">
+            <div formGroupName="user">
+              <label class="label">Username</label>
+              <p class="control">
+                <input type="text" formControlName="username" class="input">
+              </p>
+              <div class="notification is-danger" *ngIf="usernameUniquess">{{usernameUniquess}}</div>
+              <div class="notification is-danger" *ngIf="!registerForm.get(['user','username']).required && registerForm.get(['user','username']).touched">{{titleAlert}}</div>
+              <hr>
+
+              <label class="label">Email</label>
+              <p class="control"><input type="text" formControlName="email" class="input"></p>
+              <div class="notification is-danger" *ngIf="emailUniqueness">{{emailUniqueness}}</div>
+              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).required && registerForm.get(['user','email']).touched">{{titleAlert}}</div>
+              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).email && registerForm.get(['user','email']).touched">Saisir un email</div>
+
+              <label class="label">Password</label>
+              <p class="control">
+                <input type="password" formControlName="password" class="input">
+              </p>
+              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).required && registerForm.get(['user','email']).touched">{{titleAlert}}</div>
+              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).minLength && registerForm.get(['user','email']).touched">8 caracteres mini</div>
+            </div>
+
+            <label class="label">Confirm Password</label>
+            <p class="control">
+              <input type="password" formControlName="repassword" class="input">
+            </p>
+            <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).required && registerForm.get(['user','email']).touched">{{titleAlert}}</div>
+            <div class="notification is-danger" *ngIf="registerForm.get('repassword').touched && registerForm.get('repassword').hasError('nomatch')">
+                 Email addresses must match
+            </div>
+            <hr>
+
+            <p class="control">
+              <button class="button is-primary" [disabled]="registerForm.valid">Register</button>
+              <button class="button is-default">Cancel</button>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
