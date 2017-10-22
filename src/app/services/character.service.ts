@@ -7,7 +7,9 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class CharacterService {
-  public newCharacterSubject = new Subject<any>();
+  private newCharacterSubject = new Subject<any>();
+
+  newCharacter$ = this.newCharacterSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -15,11 +17,11 @@ export class CharacterService {
     return this.http.get('/api/characters/' + userId);
   }
 
-  newCharacter(charaterData: any): Observable<boolean> {
-    return this.http.post('/api/characters', JSON.stringify({character: charaterData}));
+  newCharacter(charaterData: any): Observable<string> {
+    return this.http.post('/api/characters', JSON.stringify({character: charaterData}), {responseType: 'text'})
   }
 
-  addCharacter(data) {
+  addCharacter(data: any) {
     this.newCharacterSubject.next(data);
   }
 }

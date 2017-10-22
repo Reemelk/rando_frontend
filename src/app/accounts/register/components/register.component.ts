@@ -31,7 +31,6 @@ export class RegisterComponent implements OnInit {
   }
 
   //Validators
-
   passwordMatchValidator(g: FormGroup) {
     return g.get('password').value === g.get('repassword').value ? null : {'mismatch': true};
   }
@@ -43,7 +42,7 @@ export class RegisterComponent implements OnInit {
       data => this.router.navigate(['/']),
       err => {
         if (err["errors"]["username"] == "has already been taken") {
-          this.usernameUniquess = 'Cette email est déjà utilisé.';
+          this.usernameUniquess = 'Cette username est déjà utilisé.';
         }
         if (err["errors"]["email"] == "has already been taken") {
           this.emailUniqueness = 'Cette email est déja utilisé.';

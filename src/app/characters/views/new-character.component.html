@@ -1,6 +1,6 @@
 <h3 class="title is-centered">Ajout d'un nouveau personnage</h3>
 <div class="box">
-  <form [formGroup]="newCharacterForm" (ngSubmit)="addNewCharacter()">
+  <form [formGroup]="newCharacterForm" (ngSubmit)="onNewCharacterSubmit()">
     <div class="columns">
       <div class="column">
         <label class="label">Pseudo</label>
@@ -53,7 +53,7 @@
         <p class="control"><input type="number" formControlName="level" class="input"></p>
       </div>
     </div>
-    <button class="button is-medium is-info is-outlined" [disabled]="false">Create</button>
+    <button class="button is-medium is-info is-outlined" [disabled]="!newCharacterForm.valid">Create</button>
   </form>
   <br>
 </div>

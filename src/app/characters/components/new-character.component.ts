@@ -11,6 +11,8 @@ import { CharacterService } from '../../services/character.service';
 })
 export class NewCharacterComponent implements OnInit {
   newCharacterForm: FormGroup;
+  error: string = null;
+
   servers: string[] = [
     'Agride', 'Beta test', 'Djaul', 'Écho', 'Goultard', 'Hel Munster', 'Illyazelle',
     'Julith', 'Mériana', 'Merkator', 'Mylaise', 'Nidas', 'Pandore', 'Ush'
@@ -19,7 +21,6 @@ export class NewCharacterComponent implements OnInit {
     'Crâ', 'Ecaflip', 'Eliotrope', 'Eniripsa', 'Enutrof', 'Féca', 'Huppermage', 'Iop', 'Osamodas',
     'Ouginak', 'Pandawa', 'Roublard', 'Sacrieur', 'Sadida','Sram', 'Steamer', 'Xélor', 'Zobal'
   ];
-
   roles: string[] = [
   ];
 
@@ -30,20 +31,24 @@ export class NewCharacterComponent implements OnInit {
     this.newCharacterForm = this.fb.group({
       pseudo: ['', Validators.required],
       server: ['', Validators.required],
-      role: ['', Validators.required],
+      role: [''],
       category: ['', Validators.required],
       level: ['', Validators.required]
     });
   }
 
-  addNewCharacter(): void {
+  onNewCharacterSubmit(): void {
     let auth_token = localStorage.getItem('auth_token');
     let currentUserId = JWT(auth_token)['sub'];
 
-    let character: any = this.newCharacterForm.value;
+    let character = this.newCharacterForm.value;
     character.user_id = currentUserId;
+
     this.characterService.newCharacter(character).subscribe(
-      data =>
+      () => {
+        this.characterService.addCharacter(character);
+        this.newCharacterForm.reset();
+      }
     );
   }
 }

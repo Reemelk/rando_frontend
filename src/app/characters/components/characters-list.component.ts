@@ -14,14 +14,13 @@ export class CharactersListComponent implements OnInit {
 
   constructor(private characterService: CharacterService, private route: ActivatedRoute) {
     this.userId = this.route.snapshot.params['id'];
+
   }
 
   ngOnInit() {
     this.characterService.getCharacters(this.userId)
       .subscribe(resCharactersData => this.characters = resCharactersData);
-    //
-    // this.characterService.newCharacterSubject.subscribe(
-    //   data => console.log(data)
-    // );
+
+    this.characterService.newCharacter$.subscribe(character => this.characters = [character, ...this.characters]);
   }
 }

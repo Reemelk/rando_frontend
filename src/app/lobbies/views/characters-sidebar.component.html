@@ -1,0 +1,30 @@
+<form [formGroup]="characterTypesForm">
+  <div class="field">
+    <input formControlName="fight_type" class="is-radio" type="radio" name="fight_type" [value]="false">
+    <label>Xp</label>
+    <input formControlName="fight_type" class="is-radio" type="radio" name="fight_type" [value]="true">
+    <label>Drop</label>
+  </div>
+  <table class="table is-striped">
+    <thead>
+      <tr>
+        <th>Pseudo</th>
+        <th>Serveur</th>
+        <th>Niveau</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let character of characters">
+        <td>{{character.pseudo}}</td>
+        <td>{{character.server}}</td>
+        <td>{{character.level}}</td>
+        <td>
+          <button class="button is-small" [disabled]="!characterTypesForm.valid">
+            <i (click)="onResearchListButton(character.level, character.server)" class="fa fa-search-plus has-text-success"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>

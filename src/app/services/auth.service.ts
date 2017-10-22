@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { tokenNotExpired } from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
-  public token: string;
 
-  constructor(private http: Http) {}
+  constructor(private http: Http, private router: Router) {}
 
   login(user): Observable<boolean> {
     let headers = new Headers({'Content-Type': 'application/json'});
@@ -17,17 +18,24 @@ export class AuthService {
       .map((response: Response) => {
         let tk = response.json()['token'];
         if (tk) {
-          this.token = tk;
-          localStorage.setItem('auth_token', this.token);
+          localStorage.setItem('auth_token', tk);
           return true;
         } else {
           return false;
         }
-      })
+      });
   }
 
-  logout(): void {
-    this.token = null;
-    localStorage.removeItem('auth_token');
+  logout(): boolean {
+    if (localStorage.getItem('auth_token')) {
+      localStorage.removeItem('auth_token');
+      this.router.navigate(['/']);
+      return true;
+    }
+    return false;
+  }
+
+  public isAuthenticated(): boolean {
+    return tokenNotExpired('auth_token');
   }
 }
