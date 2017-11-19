@@ -1,10 +1,11 @@
 <div class="container">
-  <div class="columns">
+  <div class="columns" *ngIf="!isLobbyInPending()">
     <div class="column is-one-third">
-      <app-characters-sidebar></app-characters-sidebar>
+      <app-character-sidebar></app-character-sidebar>
     </div>
     <div class="column">
-      <app-research-list></app-research-list>
+      <app-list-lobby></app-list-lobby>
+      <app-new-lobby></app-new-lobby>
     </div>
   </div>
 </div>

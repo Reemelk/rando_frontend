@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as JWT from 'jwt-decode';
+import { JwtHelper } from 'angular2-jwt';
 
 import { AuthService } from '../../../services/auth.service';
 
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   loginFailed: string = null;
   levelAlert: boolean = true;
 
-  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService) {}
+  constructor(private jwtHelper: JwtHelper, private router: Router, private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit() {
     //Remove localstorage
@@ -28,18 +28,17 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+    // Get the whole form instead of that
     const user: Object = {
       email: this.loginForm.get('email').value,
       password: this.loginForm.get('password').value
     };
     this.authService.login(user).subscribe(
-      data => {
-        let auth_token = localStorage.getItem('auth_token');
-        let currentUserId = JWT(auth_token)['sub'];
-        this.router.navigate([`/players/${currentUserId}/characters`]);
-      },
-      err => {
-        this.loginFailed = 'Email et/ou password incorrect';
+      data => localStorage.setItem('auth_token', data['token']),
+      err => this.loginFailed = 'Email et/ou password incorrect',
+      () => {
+        const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub']
+        this.router.navigate([`/players/${userId}/characters`]);
       }
     );
   }

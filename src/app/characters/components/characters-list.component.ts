@@ -14,7 +14,6 @@ export class CharactersListComponent implements OnInit {
 
   constructor(private characterService: CharacterService, private route: ActivatedRoute) {
     this.userId = this.route.snapshot.params['id'];
-
   }
 
   ngOnInit() {

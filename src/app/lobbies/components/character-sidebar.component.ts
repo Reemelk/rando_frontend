@@ -8,11 +8,11 @@ import { LobbyService } from '../../services/lobby.service';
 import { Character } from '../../models/character';
 
 @Component({
-  selector: 'app-characters-sidebar',
-  templateUrl: '../views/characters-sidebar.component.html',
+  selector: 'app-character-sidebar',
+  templateUrl: '../views/character-sidebar.component.html',
   // styleUrls: ['./login.component.css']
 })
-export class CharactersSidebarComponent implements OnInit {
+export class CharacterSidebarComponent implements OnInit {
   characterTypesForm: FormGroup;
   characters: Character[] = [];
 

@@ -1,0 +1,14 @@
+<div class="container" *ngIf="group">
+  {{group.name}}
+  <br>
+  {{group.server}}
+  {{group.maxp}}
+  <hr>
+  <div class="" *ngFor="let user of users">
+    {{user.username}}
+  </div>
+
+  <button *ngIf="areYouALeader()" class="button is-danger" (click)="onStatusGroupSubmitBtn(1)">Let's go</button>
+  <button *ngIf="areYouALeader()" class="button is-danger" (click)="onStatusGroupSubmitBtn(2)">Anuler ce groupe</button>
+  <button *ngIf="!areYouALeader()" class="button is-danger" (click)="onLeaveGroupSubmitBtn()">Quitter le groupe</button>
+</div>

@@ -17,8 +17,8 @@ export class CharacterService {
     return this.http.get('/api/characters/' + userId);
   }
 
-  newCharacter(charaterData: any): Observable<string> {
-    return this.http.post('/api/characters', JSON.stringify({character: charaterData}), {responseType: 'text'})
+  newCharacter(charaterData: any): Observable<any> {
+    return this.http.post('/api/characters', JSON.stringify({character: charaterData}))
   }
 
   addCharacter(data: any) {

@@ -1,6 +1,10 @@
-<div class="box content">
- <article class="post">
-    <h4>The Nooby Crew</h4>
+<div class="notification is-danger" *ngIf="this.errorMessage">
+  <button class="delete" (click)="this.errorMessage = null"></button>
+  <strong>{{this.errorMessage}}</strong>
+</div>
+<div *ngIf="displayListLobby()">
+  <article class="post" *ngFor="let group of groups">
+    <h4>{{group.name}}</h4>
     <div class="media">
       <div class="media-left">
       </div>
@@ -10,7 +14,7 @@
             <p><span class="tag">Jour Actuel: 9</span></p>
           </div>
           <div class="column">
-            <p>Server</p>
+            <p>{{group.server}}</p>
           </div>
           <div class="column">
             <p>Joueur Actuel</p>
@@ -21,5 +25,6 @@
         </div>
       </div>
     </div>
+    <button (click)="onJoinLobbySubmit(group.id)" type="button" class="button is-success">Rejoindre</button>
   </article>
 </div>

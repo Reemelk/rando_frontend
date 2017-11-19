@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { URLSearchParams } from '@angular/http'
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 
@@ -18,5 +17,17 @@ export class LobbyService {
 
   addGroupsList(data) {
     this.groupsListSubject.next(data);
+  }
+
+  getGroup(groupId: any): Observable<any> {
+    return this.http.get(`/api/groups/${groupId}`);
+  }
+
+  createGroup(groupData: any): Observable<any> {
+    return this.http.post('/api/groups', JSON.stringify({group: groupData}));
+  }
+
+  updateGroup(groupId: number, userId?: number, status?: number): Observable<string> {
+    return this.http.patch(`/api/groups/${groupId}`, JSON.stringify({user_id: userId, status: status}), {responseType: 'text'});
   }
 }
