@@ -1,8 +1,15 @@
 import { AbstractControl } from '@angular/forms';
 
-export const emailMatcher = (control: AbstractControl): {[key: string]: boolean} => {
-  const email = control.get(['user','email']);
-  const repassword = control.get('repassword');
-  if (!email || !repassword) return null;
-  return email.value === repassword.value ? null : {nomatch: true};
-};
+export class PasswordValidation {
+  static MatchPassword(ac: AbstractControl) {
+    let password = ac.get(['user', 'password']).value;
+    let repassword = ac.get('repassword').value;
+    if (password != repassword) {
+      console.log('false');
+      ac.get('repassword').setErrors({MatchPassword: true})
+    } else {
+      console.log('true');
+      return null;
+    }
+  }
+}

@@ -27,30 +27,28 @@ export class ListLobbyComponent implements OnInit {
     );
   }
 
-  public displayListLobby(): boolean {
-    return this.groups.length == 0 ? false : true;
-  }
-
-  public groupsEmptied(): void {
-    this.groups = [];
-  }
-
-  onJoinLobbySubmit(group_id: number) {
+  public onJoinLobbySubmit(group_id: number) {
     const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
     const groupId = group_id;
     this.lobbyService.updateGroup(groupId, userId).subscribe(
       data => localStorage.setItem('auth_token', JSON.parse(data)['token']),
       error => {
         if (error.status == 423) {
-          this.errorMessage = 'Vous avez atteint le maximum de joueur pour ce groupe.';
+          this.errorMessage = 'Ce groupe a atteint le maximum de joueur.';
         } else {
           this.errorMessage = 'Vous êtes déjà dans un groupe.';
         }
         this.cd.markForCheck();
       },
-      () => {
-        this.router.navigate([`/groups/${groupId}`]);
-      }
+      () => this.router.navigate([`players/${userId}/groups/${groupId}`])
     );
+  }
+
+  public displayListLobby(): boolean {
+    return this.groups.length == 0 ? false : true;
+  }
+
+  public groupsEmptied(): void {
+    this.groups = [];
   }
 }

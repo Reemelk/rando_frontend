@@ -19,19 +19,23 @@ export class CharacterSidebarComponent implements OnInit {
   constructor(private fb: FormBuilder, private characterService: CharacterService, private lobbyService: LobbyService, private jwtHelper: JwtHelper) {}
 
   ngOnInit() {
-    this.characterTypesForm = this.fb.group({
-      fight_type: ['', Validators.required]
-    });
-    const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
+    this.characterTypesForm = this.fb.group({fight_type: ['', Validators.required]});
 
-    this.characterService.getCharacters(userId)
-      .subscribe(resCharacterData => this.characters = this.characters.concat(resCharacterData));
+    const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
+    this.characterService.getCharacters(userId).subscribe(
+      resCharacterData => this.characters = this.characters.concat(resCharacterData)
+    );
   }
 
   onResearchListButton(level: number, server: string): void {
     let type = this.characterTypesForm.value.fight_type;
+    this.lobbyService.getGroupsList(level, server, type).subscribe(data => {
+      this.lobbyService.addGroupsList(data);
+      this.lobbyService.sizeGroupsList(this.convert_length_to_bool(data));
+    });
+  }
 
-    this.lobbyService.getGroupsList(level, server, type)
-      .subscribe(data => this.lobbyService.addGroupsList(data));
+  public convert_length_to_bool(data: any): boolean {
+    return (data.length > 0) ? false : true;
   }
 }

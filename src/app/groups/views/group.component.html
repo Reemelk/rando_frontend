@@ -1,14 +1,40 @@
 <div class="container" *ngIf="group">
-  {{group.name}}
+  <p class="title is-1 is-spaced">{{group.name}}</p>
   <br>
-  {{group.server}}
-  {{group.maxp}}
-  <hr>
-  <div class="" *ngFor="let user of users">
-    {{user.username}}
+  <div class="columns">
+    <div class="column">
+      <h1>Serveur: <strong class="has-text-info">{{group.server}}</strong></h1>
+    </div>
+    <div class="column">
+      <h1>Type: <strong class="has-text-info">{{group.fight_type | typefightString }}</strong></h1>
+    </div>
+    <div class="column" *ngIf="group.maxp">
+      <h1>Joueur maximun: <strong class="has-text-info">{{group.maxp}}</strong></h1>
+    </div>
+    <div class="column">
+      <h1>Status: <strong [ngClass]="(group.status === 'ongoing') ? 'has-text-success' : 'has-text-danger'">{{group.status}}</strong></h1>
+    </div>
   </div>
-
-  <button *ngIf="areYouALeader()" class="button is-danger" (click)="onStatusGroupSubmitBtn(1)">Let's go</button>
-  <button *ngIf="areYouALeader()" class="button is-danger" (click)="onStatusGroupSubmitBtn(2)">Anuler ce groupe</button>
-  <button *ngIf="!areYouALeader()" class="button is-danger" (click)="onLeaveGroupSubmitBtn()">Quitter le groupe</button>
+  <br>
+  <table class="table is-bordered is-striped is-narrow">
+    <thead>
+      <tr>
+        <th>Liste de joueurs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let index of orgCount">
+        <td>Joueur n°{{index}}</td>
+      </tr>
+      <tr *ngFor="let user of group.users">
+        <td>{{user.username}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <div class="group-status" *ngIf="group.status === 'ongoing'">
+    <button *ngIf="areYouALeader()" class="button is-danger {{addLoading}}" (click)="onAdminGroupStatus('closed')">Let's go</button>
+    <button *ngIf="areYouALeader()" class="button is-danger {{addLoading}}" (click)="onAdminGroupStatus('cancelled')">Anuler ce groupe</button>
+    <button *ngIf="!areYouALeader()" class="button is-danger {{addLoading}}" (click)="onPlayerLeavingGroup()">Quitter le groupe</button>
+  </div>
 </div>

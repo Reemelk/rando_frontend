@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { JwtHelper } from 'angular2-jwt';
 import { LobbyService } from '../../services/lobby.service';
+import { Group } from '../../models/group';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-new-lobby',
@@ -11,13 +14,18 @@ import { LobbyService } from '../../services/lobby.service';
 })
 export class NewLobbyComponent implements OnInit {
   newGroupForm: FormGroup;
+  userId: number;
+  groupId: number;
+  group: any;
 
   servers: string[] = [
     'Agride', 'Beta test', 'Djaul', 'Écho', 'Goultard', 'Hel Munster', 'Illyazelle',
     'Julith', 'Mériana', 'Merkator', 'Mylaise', 'Nidas', 'Pandore', 'Ush'
   ];
 
-  constructor(private lobbyService: LobbyService, private fb: FormBuilder, private router: Router) {}
+  constructor(private flashMessagesService: FlashMessagesService, private jwtHelper: JwtHelper, private lobbyService: LobbyService, private fb: FormBuilder, private router: Router) {
+    this.userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
+  }
 
   ngOnInit() {
     this.newGroupForm = this.fb.group({
@@ -31,14 +39,16 @@ export class NewLobbyComponent implements OnInit {
     });
   }
 
-  onNewGroupSubmit(): void {
-    let group: any = this.newGroupForm.value;
-    this.lobbyService.createGroup(group).subscribe(
+  public onNewGroupSubmit(): void {
+    this.group = this.newGroupForm.value;
+    this.group['user_leader'] = this.userId;
+    this.lobbyService.createGroup(this.group).subscribe(
       data => {
-        this.newGroupForm.reset()
-        let group_status = localStorage.setItem('grp_status', JSON.stringify(true));
-        this.router.navigate([`/groups/${data['group_id']}`]);
-      }
+        localStorage.setItem('auth_token', data['token']);
+        this.groupId = data['group_id'];
+      },
+      error => this.flashMessagesService.show('Un problème est survenu lors de la création du groupe.', {cssClass: 'notification is-danger'}),
+      () => this.router.navigate([`/players/${this.userId}/groups/${this.groupId}`])
     );
   }
 }

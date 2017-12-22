@@ -8,5 +8,6 @@ export interface Group {
   range?: number;
   server?: string;
   type_fight?: boolean;
-  status?: boolean;
+  status?: string;
+  organizations_count?: number;
 }

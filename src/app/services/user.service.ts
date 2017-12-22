@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class RegisterService {
+export class UserService {
   constructor(private http: HttpClient) {}
 
-  register(data: any): Observable<any> {
-    return this.http.post('/api/register', JSON.stringify({user: data}));
+  getCurrentGroupUser(userId: number): Observable<any> {
+    return this.http.get(`/api/current_group/${userId}`);
   }
 }

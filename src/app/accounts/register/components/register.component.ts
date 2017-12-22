@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { emailMatcher } from '../../../shared/validators/email-matcher';
+import { PasswordValidation } from '../../../shared/validators/email-matcher';
 import { RegisterService } from '../../../services/register.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-register',
@@ -16,30 +17,27 @@ export class RegisterComponent implements OnInit {
   usernameUniquess: string = null;
   emailUniqueness: string = null;
 
-  constructor(private router: Router, private registerService: RegisterService, private fb: FormBuilder) {
+  constructor(private router: Router, private registerService: RegisterService, private fb: FormBuilder, private flashMessagesService: FlashMessagesService) {
   }
 
   ngOnInit() {
     this.registerForm = this.fb.group({
       user: this.fb.group({
-        username: ['', Validators.required],
-        email: ['', [Validators.email, Validators.required]],
-        password: ['', [Validators.minLength(8), Validators.required]]
+        username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(8)]]
       }),
       repassword: ['', Validators.required]
-    }, {Validator: emailMatcher});
+    }, {validator: PasswordValidation.MatchPassword});
   }
 
-  //Validators
-  passwordMatchValidator(g: FormGroup) {
-    return g.get('password').value === g.get('repassword').value ? null : {'mismatch': true};
-  }
-
-  //Event
   register(): void {
     let user: any = this.registerForm.get('user').value;
     this.registerService.register(user).subscribe(
-      data => this.router.navigate(['/']),
+      data => {
+        this.flashMessagesService.show('Vous avez été inscrit avec succès.', {cssClass: 'notification is-success'})
+        this.router.navigate(['']);
+      },
       err => {
         if (err["errors"]["username"] == "has already been taken") {
           this.usernameUniquess = 'Cette username est déjà utilisé.';

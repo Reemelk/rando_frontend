@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IntervalObservable } from "rxjs/observable/IntervalObservable";
+import { Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 import { JwtHelper } from 'angular2-jwt';
 import { LobbyService } from '../../services/lobby.service';
@@ -11,48 +12,69 @@ import { Group } from '../../models/group';
   templateUrl: '../views/group.component.html',
   // styleUrls: ['./login.component.css']
 })
-export class GroupComponent implements OnInit {
-  private groupId: number;
+export class GroupComponent implements OnInit, OnDestroy {
+  groupId: number;
+  userId: number;
   group: Group;
-  users: any[] = [];
+  timerSubscription: Subscription;
+  orgCount: number[];
+  addLoading: string = '';
 
-  constructor(private lobbyService: LobbyService, private route: ActivatedRoute, private router: Router, private jwtHelper: JwtHelper) {
-    this.groupId = this.route.snapshot.params['id'];
+  constructor(private renderer: Renderer2, private lobbyService: LobbyService, private route: ActivatedRoute, private router: Router, private jwtHelper: JwtHelper) {
+    this.groupId = +this.route.snapshot.params['id'];
+    this.userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
   }
 
   ngOnInit() {
-    IntervalObservable.create(7000).subscribe(() => {
-      this.lobbyService.getGroup(this.groupId).subscribe(
-        data => {
-          this.group = data[0];
-          this.users = data[1];
+    let timer = Observable.timer(0, 7000);
+    this.timerSubscription = timer.subscribe(() => {
+      this.lobbyService.getGroup(this.groupId).subscribe(data => {
+        this.group = data;
+        this.orgCount = this.makeLoopGreatAgain(this.group.organizations_count);
+        if (this.group.hasOwnProperty('users')) {
+          this.timerSubscription.unsubscribe();
+          this.lobbyService.updateTokenStatus(this.groupId).subscribe(data => this.setNewToken(data));
         }
-      );
+      });
     });
   }
 
-  onStatusGroupSubmitBtn(status: number): void {
-    this.lobbyService.updateGroup(this.groupId, undefined, status).subscribe(
-      data => localStorage.setItem('auth_token', JSON.parse(data)['token']),
-      error => console.log(error),
-      () => {
-        const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
-        this.router.navigate([`/players/${userId}/search`]);
+  ngOnDestroy() {
+    this.timerSubscription.unsubscribe();
+  }
+
+  public onPlayerLeavingGroup(): void {
+    this.addLoading = 'is-loading';
+    this.lobbyService.updateGroup(this.groupId, this.userId, null).subscribe(
+      data => {
+        localStorage.setItem('auth_token', JSON.parse(data)['token']);
+        this.router.navigate([`players/${this.userId}/search`]);
       }
     );
   }
 
-  onLeaveGroupSubmitBtn(): void {
-    const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
-    this.lobbyService.updateGroup(this.groupId, userId).subscribe(
-      data => localStorage.setItem('auth_token', JSON.parse(data)['token']),
-      error => console.log(error),
-      () => this.router.navigate([`/players/${userId}/search`])
+  public onAdminGroupStatus(status: string): void {
+    this.addLoading = 'is-loading';
+    this.lobbyService.updateGroup(this.groupId, null, status).subscribe(
+      data => localStorage.setItem('auth_token', JSON.parse(data)['token'])
     );
   }
 
+  public setNewToken(str: string): void {
+    if (str['token']) {
+       localStorage.setItem('auth_token', str['token']);
+     }
+  }
+
   public areYouALeader(): boolean {
-    const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub'];
-    return userId == this.group.user_leader ? true : false;
+    return this.userId == this.group.user_leader ? true : false;
+  }
+
+  public makeLoopGreatAgain(size: number): number[] {
+    let fArray: number[] = [];
+    for(let i = 1; i <= size; ++i) {
+      fArray.push(i);
+    }
+    return fArray;
   }
 }

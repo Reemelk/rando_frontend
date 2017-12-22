@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { JwtHelper } from 'angular2-jwt';
 
 import { AuthService } from '../../../services/auth.service';
+import { FlashMessagesService } from 'angular2-flash-messages';
 
 @Component({
   selector: 'app-login',
@@ -12,15 +12,10 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  loginFailed: string = null;
-  levelAlert: boolean = true;
 
-  constructor(private jwtHelper: JwtHelper, private router: Router, private fb: FormBuilder, private authService: AuthService) {}
+  constructor(private router: Router, private fb: FormBuilder, private authService: AuthService, private flashMessagesService: FlashMessagesService) {}
 
   ngOnInit() {
-    //Remove localstorage
-    this.authService.logout();
-    //Generate form
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -28,22 +23,14 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    // Get the whole form instead of that
-    const user: Object = {
-      email: this.loginForm.get('email').value,
-      password: this.loginForm.get('password').value
-    };
+    let user = this.loginForm.value;
     this.authService.login(user).subscribe(
       data => localStorage.setItem('auth_token', data['token']),
-      err => this.loginFailed = 'Email et/ou password incorrect',
+      err => this.flashMessagesService.show('Email et/ou password incorrect', {cssClass: 'notification is-danger', timeout: 3500}),
       () => {
-        const userId = this.jwtHelper.decodeToken(localStorage.getItem('auth_token'))['sub']
-        this.router.navigate([`/players/${userId}/characters`]);
+        this.flashMessagesService.show('Vous êtes authentifié avec succès.', {cssClass: 'notification is-success'})
+        this.router.navigate(['/dashboard']);
       }
     );
-  }
-
-  closeAlert() {
-    return this.levelAlert = false;
   }
 }

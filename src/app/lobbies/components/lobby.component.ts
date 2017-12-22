@@ -1,23 +1,18 @@
-import { Component, DoCheck } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { DisplayComponentService } from './../display-component.service';
+import { LobbyService } from '../../services/lobby.service';
 
 @Component({
   selector: 'app-lobby',
   templateUrl: '../views/lobby.component.html',
   // styleUrls: ['./login.component.css']
 })
-export class LobbyComponent implements DoCheck {
-  displayTemplate: boolean = false;
+export class LobbyComponent {
+  showNewLobby: boolean = false;
 
-  constructor(private displaycptService: DisplayComponentService) {}
+  constructor(private lobbyService: LobbyService) {}
 
-  ngDoCheck() {
-    this.displaycptService.StateListLobby$.subscribe(state => this.displayTemplate = state);
-  }
-
-  public isLobbyInPending(): boolean {
-    let gstatus = JSON.parse(localStorage.getItem('grp_status'));
-    return gstatus ? true : false;
+  ngOnInit() {
+    this.lobbyService.sizeGroupsList$.subscribe(data => this.showNewLobby = data);
   }
 }

@@ -5,6 +5,8 @@
       <div class="column">
         <label class="label">Pseudo</label>
         <p class="control"><input type="text" formControlName="pseudo" class="input"></p>
+        <div class="notification is-danger" *ngIf="newCharacterForm.get('pseudo').hasError('minlength') && newCharacterForm.get('pseudo').touched">Pseudo doit être de 3 caracteres minimun</div>
+        <div class="notification is-danger" *ngIf="newCharacterForm.get('pseudo').hasError('maxlength') && newCharacterForm.get('pseudo').touched">Pseudo doit être de 33 caracteres maximun</div>
       </div>
       <div class="column">
         <label class="label">Liste des serveurs</label>
@@ -35,22 +37,8 @@
         </div>
       </div>
       <div class="column">
-        <label class="label">Rôle</label>
-        <div class="field">
-          <div class="control">
-            <div class="select">
-              <select [disabled]="true">
-                <option></option>
-                <hr class="dropdown-divider">
-                <option *ngFor=""></option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="column">
         <label class="label">Niveau</label>
-        <p class="control"><input type="number" formControlName="level" class="input"></p>
+        <p class="control"><input type="number" formControlName="level" class="input" min="0" max="200"></p>
       </div>
     </div>
     <button class="button is-medium is-info is-outlined" [disabled]="!newCharacterForm.valid">Create</button>

@@ -5,7 +5,6 @@
       <th>Pseudo du personnage</th>
       <th>Serveur</th>
       <th>Classe</th>
-      <th>Rôle</th>
       <th>Niveau</th>
     </tr>
   </thead>
@@ -14,9 +13,22 @@
       <td>{{character.pseudo}}</td>
       <td>{{character.server}}</td>
       <td>{{character.category}}</td>
-      <td>{{character.role}}</td>
       <td>{{character.level}}</td>
-      <td><i class="fa fa-trash-o has-text-danger" aria-hidden="true"></i></td>
+      <td><i class="fa fa-eraser has-text-info" aria-hidden="true" (click)="showUpdateCharacterModal(character)"></i></td>
+      <td><i class="fa fa-trash-o has-text-danger" aria-hidden="true" (click)="onDeleteCharacterSubmit(character)"></i></td>
     </tr>
   </tbody>
 </table>
+
+<div class="modal {{showModal}}">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <div class="control">
+      <form [formGroup]="updateLevelCharacterForm" (ngSubmit)="onUpdateCharacterSubmit()">
+        <input class="input is-hovered" type="number" formControlName="level" placeholder="Nouveau niveau du personnage" min="0" max="200">
+        <button class="button is-medium is-link" [disabled]="!updateLevelCharacterForm.valid">Mettre à jour</button>
+      </form>
+    </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close" (click)="this.toggleForm()"></button>
+</div>

@@ -38,7 +38,18 @@
       </div>
       <div class="column">
         <label class="label">Xp ou Drop</label>
-        <p class="control"><input type="number" formControlName="fight_type" class="input"></p>
+        <div class="field">
+          <div class="control">
+            <div class="select">
+              <select formControlName="fight_type">
+                <option></option>
+                <hr class="dropdown-divider">
+                <option value="false">XP</option>
+                <option value="true">DROP</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <button class="button is-medium is-info is-outlined" [disabled]="!newGroupForm.valid">Create</button>

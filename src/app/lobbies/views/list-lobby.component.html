@@ -4,27 +4,23 @@
 </div>
 <div *ngIf="displayListLobby()">
   <article class="post" *ngFor="let group of groups">
-    <h4>{{group.name}}</h4>
+    <hr>
     <div class="media">
-      <div class="media-left">
-      </div>
       <div class="media-content">
+        <h4 class="is-size-5 has-text-weight-semibold">{{group.name}}</h4>
+        <br>
         <div class="content columns">
           <div class="column">
-            <p><span class="tag">Jour Actuel: 9</span></p>
+            <p><span class="tag">Dans le lobby:</span> {{group.organizations_count}} joueurs</p>
           </div>
           <div class="column">
-            <p>{{group.server}}</p>
+            <p><span class="tag">Joueurs maximun:</span> {{group.maxp}}</p>
           </div>
           <div class="column">
-            <p>Joueur Actuel</p>
-          </div>
-          <div class="column">
-            <p>XP ou DROP</p>
+            <button (click)="onJoinLobbySubmit(group.id)" type="button" class="button is-success">Rejoindre</button>
           </div>
         </div>
       </div>
     </div>
-    <button (click)="onJoinLobbySubmit(group.id)" type="button" class="button is-success">Rejoindre</button>
   </article>
 </div>

@@ -11,35 +11,35 @@
                 <input type="text" formControlName="username" class="input">
               </p>
               <div class="notification is-danger" *ngIf="usernameUniquess">{{usernameUniquess}}</div>
-              <div class="notification is-danger" *ngIf="!registerForm.get(['user','username']).required && registerForm.get(['user','username']).touched">{{titleAlert}}</div>
+              <div class="notification is-danger" *ngIf="registerForm.get(['user','username']).hasError('required') && registerForm.get(['user','username']).touched">{{titleAlert}}</div>
+              <div class="notification is-danger" *ngIf="registerForm.get(['user','username']).hasError('minlength') && registerForm.get(['user','username']).touched">Username doit être de 3 caracteres minimum</div>
+              <div class="notification is-danger" *ngIf="registerForm.get(['user','username']).hasError('maxlength') && registerForm.get(['user','username']).touched">Username doit être de 30 caracteres maximum</div>
               <hr>
 
               <label class="label">Email</label>
               <p class="control"><input type="text" formControlName="email" class="input"></p>
               <div class="notification is-danger" *ngIf="emailUniqueness">{{emailUniqueness}}</div>
-              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).required && registerForm.get(['user','email']).touched">{{titleAlert}}</div>
-              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).email && registerForm.get(['user','email']).touched">Saisir un email</div>
+              <div class="notification is-danger" *ngIf="registerForm.get(['user','email']).hasError('required') && registerForm.get(['user','email']).touched">{{titleAlert}}</div>
+              <div class="notification is-danger" *ngIf="registerForm.get(['user','email']).hasError('email') && registerForm.get(['user','email']).touched">Saisir un email</div>
 
               <label class="label">Password</label>
               <p class="control">
                 <input type="password" formControlName="password" class="input">
               </p>
-              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).required && registerForm.get(['user','email']).touched">{{titleAlert}}</div>
-              <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).minLength && registerForm.get(['user','email']).touched">8 caracteres mini</div>
+              <div class="notification is-danger" *ngIf="registerForm.get(['user','password']).hasError('required') && registerForm.get(['user','password']).touched">{{titleAlert}}</div>
+              <div class="notification is-danger" *ngIf="registerForm.get(['user','password']).hasError('minlength') && registerForm.get(['user','password']).touched">8 caracteres mini</div>
             </div>
 
             <label class="label">Confirm Password</label>
             <p class="control">
               <input type="password" formControlName="repassword" class="input">
             </p>
-            <div class="notification is-danger" *ngIf="!registerForm.get(['user','email']).required && registerForm.get(['user','email']).touched">{{titleAlert}}</div>
-            <div class="notification is-danger" *ngIf="registerForm.get('repassword').touched && registerForm.get('repassword').hasError('nomatch')">
-                 Email addresses must match
-            </div>
+            <div class="notification is-danger" *ngIf="registerForm.get('repassword').hasError('required') && registerForm.get('repassword').touched">{{titleAlert}}</div>
+            <div class="notification is-danger" *ngIf="registerForm.get('repassword').hasError('MatchPassword') && registerForm.get('repassword').touched">Veuillez saisir le mot de passe identique</div>
             <hr>
 
             <p class="control">
-              <button class="button is-primary" [disabled]="registerForm.valid">Register</button>
+              <button class="button is-primary" [disabled]="!registerForm.valid">Register</button>
               <button class="button is-default">Cancel</button>
             </p>
           </form>

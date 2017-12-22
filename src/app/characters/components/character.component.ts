@@ -9,13 +9,11 @@ export class CharacterComponent {
   displayNewCharacterForm: boolean = false;
   levelAlert: string = 'is-active';
 
-  constructor() {}
-
-  toggleForm(): void {
+  public toggleForm(): void {
     this.displayNewCharacterForm = !this.displayNewCharacterForm
   }
 
-  closeAlert(): void {
+  public closeAlert(): void {
     this.levelAlert = '';
   }
 }

@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="columns">
+    <div class="column ongoing-group" *ngIf="areYouOngoingGroup()">
+      <a class="button is-info is-large" [routerLink]="['/players', userId, 'groups', currentGroup]">Dans un lobby</a>
+    </div>
+    <div class="no-ongoing-group" *ngIf="!areYouOngoingGroup()">
+      <div class="column">
+        <a class="button is-info is-large" [routerLink]="['/players', userId, 'search']">Rechercher un groupe</a>
+      </div>
+      <div class="column">
+        <a class="button is-info is-large" [routerLink]="['/players', userId, 'characters']">Vos personnages</a>
+      </div>
+    </div>
+  </div>
+</div>
